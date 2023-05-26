@@ -1,6 +1,25 @@
+variable "STAGE" {
+  type    = string
+  default = "local"
+}
+
 // Set our AWS region
 provider "aws" {
   region = "us-east-1"
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+  access_key = "fakeKeyForLocalTesting"
+  secretKey = "fakeSecretForLocalTesting"
+  endpoints {
+    apigateway       = var.STAGE == "local" ? "http://localhost:4566" : null
+    cloudformation   = var.STAGE == "local" ? "http://localhost:4566" : null
+    cloudwatch       = var.STAGE == "local" ? "http://localhost:4566" : null
+    cloudwatchevents = var.STAGE == "local" ? "http://localhost:4566" : null
+    iam              = var.STAGE == "local" ? "http://localhost:4566" : null
+    lambda           = var.STAGE == "local" ? "http://localhost:4566" : null
+    s3               = var.STAGE == "local" ? "http://localhost:4566" : null
+  }
 }
 
 // Build the lambda zip file
@@ -13,8 +32,9 @@ data "archive_file" "lambda_zip" {
 // Create the lambda function resource with our build ZIP file
 resource "aws_lambda_function" "lambda" {
   function_name = "myTestLambda"
-
-  filename      = data.archive_file.lambda_zip.output_path
+  s3_bucket     = var.STAGE == "local" ? "hot-reload" : null
+  s3_key        = var.STAGE == "local" ? "${path.cwd}/lambda" : null
+  filename      = var.STAGE == "local" ? null : data.archive_file.lambda_zip.output_path
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   handler       = "index.handler"
   runtime       = "nodejs18.x"
@@ -81,13 +101,13 @@ resource "aws_lambda_permission" "apigw" {
   function_name = aws_lambda_function.lambda.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "${aws_api_gateway_rest_api.api.execution_arn}/*/GET/test"
+  source_arn = "${aws_api_gateway_rest_api.api.execution_arn}/${var.STAGE}/GET/test"
 }
 
 // Create a deployment of our API Gateway named "local"
 resource "aws_api_gateway_deployment" "deployment" {
   depends_on  = [aws_api_gateway_integration.integration]
   rest_api_id = aws_api_gateway_rest_api.api.id
-  stage_name  = "local"
+  stage_name  = var.STAGE
   description = "Deployed on ${timestamp()}"
 }
