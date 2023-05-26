@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { App, TerraformStack, Token } from 'cdktf';
+import {App, TerraformStack, TerraformVariable, Token} from 'cdktf';
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
 import { ArchiveProvider } from '@cdktf/provider-archive/lib/provider';
 import { DataArchiveFile } from '@cdktf/provider-archive/lib/data-archive-file';
@@ -12,15 +12,26 @@ import { ApiGatewayMethod } from '@cdktf/provider-aws/lib/api-gateway-method';
 import { ApiGatewayResource } from '@cdktf/provider-aws/lib/api-gateway-resource';
 import { ApiGatewayRestApi } from '@cdktf/provider-aws/lib/api-gateway-rest-api';
 import { AWS_CONFIG } from "./localstack-config";
+import { resolve } from 'path';
+
+const lambdaDirectory = resolve(__dirname, '../../lambda');
+const lambdaSource = resolve(lambdaDirectory, 'index.js');
+const lambdaBuild = resolve(lambdaDirectory, 'build/lambda.zip');
+
+console.log(`lambdaBuild: ${lambdaBuild}`);
+console.log(`lambdaSource: ${lambdaSource}`);
 
 const configValues = {
 	stackName: 'cdktf-stack',
 	lambda: {
 		name: 'cdkTestLambda',
-		sourcePath: '../../../../lambda/index.js',
-		buildPath: '../../../../lambda/build/lambda.zip',
+		sourcePath: lambdaSource,
+		buildPath: lambdaBuild,
 	}
 };
+
+// Set a stage for differentiating environments
+export const STAGE = process.env.STAGE || "local";
 
 class LambdaAPIStack extends TerraformStack {
 	constructor(scope: Construct, name: string) {
@@ -55,7 +66,9 @@ class LambdaAPIStack extends TerraformStack {
 
 		const fun = new LambdaFunction(this, 'cdk_lambda', {
 			functionName: configValues.lambda.name,
-			filename: archiveFile.outputPath,
+			s3Bucket: STAGE == "local" ? "hot-reload" : null,
+			s3Key: STAGE == "local" ? lambdaDirectory : null,
+			filename: STAGE == "local" ? null : archiveFile.outputPath,
 			sourceCodeHash: archiveFile.outputBase64Sha256,
 			handler: 'index.handler',
 			runtime: 'nodejs18.x',
@@ -93,13 +106,13 @@ class LambdaAPIStack extends TerraformStack {
 			action: 'lambda:InvokeFunction',
 			functionName: fun.functionName,
 			principal: 'apigateway.amazonaws.com',
-			sourceArn: `${apiGateway.executionArn}/*/GET/test`,
+			sourceArn: `${apiGateway.executionArn}/${STAGE}/GET/test`,
 		});
 
 		new ApiGatewayDeployment(this, 'cdk_deployment', {
 			dependsOn: [apiIntegration],
 			restApiId: apiGateway.id,
-			stageName: 'local',
+			stageName: STAGE,
 			description: `Deployed on ${Token.asString(new Date())}`,
 		});
 	}
