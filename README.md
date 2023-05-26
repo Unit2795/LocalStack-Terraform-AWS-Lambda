@@ -30,7 +30,11 @@ This is a simple guide on how to: set up LocalStack and Terraform. This example 
 6. Query your API Gateway endpoint!
    - Assemble an HTTP request using the API Gateway ID you noted earlier
    - Syntax: `http://<API Gateway ID>.execute-api.localhost.localstack.cloud:4566/<stageId>/<path>`
-   - Example: `http://1ltvwqpuju.execute-api.localhost.localstack.cloud:4566/local/test`
+   - Example Endpoint: `http://1ltvwqpuju.execute-api.localhost.localstack.cloud:4566/local/test`
+   - Example cURL:
+   ```shell
+   curl --location 'http://1ltvwqpuju.execute-api.localhost.localstack.cloud:4566/local/test'
+   ```
    - Example Response: `{"message":"Hello World!"}`
 
 # Final Questions
