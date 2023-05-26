@@ -1,4 +1,4 @@
-# LocalStack & Terraform/Pulumi REST API
+# LocalStack & Terraform REST API
 
 Develop rapidly for the cloud without the associated costs, slow feedback, and risk of actual deployments using LocalStack!
 
