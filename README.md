@@ -19,7 +19,6 @@ This is a guide on how to set up [Terraform](https://developer.hashicorp.com/ter
 Some functionality like UpdateIntegration for API Gateway is not currently available for the community edition of LocalStack. It's possible to force the recreation of the API Gateway integration and get around this, but Pro includes a lot of other handy features, such as the [Resource Browser](https://docs.localstack.cloud/user-guide/web-application/resource-browser/) which is a web interface for browsing your LocalStack AWS resources.
 
 # Final Questions
-1. Is it possible to hot-reload these lambdas for a faster feedback cycle?
-2. What sort of workflows is this setup good for?
-3. What are some of the limitations of this setup?
-4. Is it better to run the lambda manually or through LocalStack?
+1. What sort of workflows is this setup good for?
+2. What are some of the limitations of this setup?
+3. Is it better to run the lambda manually or through LocalStack?
