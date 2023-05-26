@@ -32,3 +32,9 @@ This is a simple guide on how to: set up LocalStack and Terraform. This example 
    - Syntax: `http://<API Gateway ID>.execute-api.localhost.localstack.cloud:4566/<stageId>/<path>`
    - Example: `http://1ltvwqpuju.execute-api.localhost.localstack.cloud:4566/local/test`
    - Example Response: `{"message":"Hello World!"}`
+
+# Final Questions
+1. Is it possible to hot-reload these lambdas for a faster feedback cycle?
+2. What sort of workflows is this setup good for?
+3. What are some of the limitations of this setup?
+4. Is it better to run the lambda manually or through LocalStack?
