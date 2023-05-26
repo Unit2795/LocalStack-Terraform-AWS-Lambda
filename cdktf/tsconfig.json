@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "noEmitOnError": true,
+    "skipLibCheck": true,
+    "module": "CommonJS",
+    "target": "ES2019"
+  },
+  "include": [
+    "src/main.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "cdktf.out"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "version": "0.16.1",
+  "stacks": {
+    "cdktf-stack": {
+      "name": "cdktf-stack",
+      "constructPath": "cdktf-stack",
+      "workingDirectory": "stacks\\cdktf-stack",
+      "synthesizedStackPath": "stacks\\cdktf-stack\\cdk.tf.json",
+      "annotations": [],
+      "dependencies": []
+    }
+  }
+}

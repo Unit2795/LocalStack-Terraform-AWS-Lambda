@@ -1,0 +1,201 @@
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "cdktf-stack",
+      "version": "0.16.1"
+    },
+    "outputs": {
+    }
+  },
+  "data": {
+    "archive_file": {
+      "cdk_lambda_zip": {
+        "//": {
+          "metadata": {
+            "path": "cdktf-stack/cdk_lambda_zip",
+            "uniqueId": "cdk_lambda_zip"
+          }
+        },
+        "output_path": "../../../../lambda/build/lambda.zip",
+        "source_file": "../../../../lambda/index.js",
+        "type": "zip"
+      }
+    }
+  },
+  "provider": {
+    "archive": [
+      {
+      }
+    ],
+    "aws": [
+      {
+        "access_key": "fakeKeyForLocalTesting",
+        "endpoints": [
+          {
+            "apigateway": "http://localhost:4566",
+            "apigatewayv2": "http://localhost:4566",
+            "cloudformation": "http://localhost:4566",
+            "cloudwatch": "http://localhost:4566",
+            "dynamodb": "http://localhost:4566",
+            "ec2": "http://localhost:4566",
+            "elasticache": "http://localhost:4566",
+            "es": "http://localhost:4566",
+            "firehose": "http://localhost:4566",
+            "iam": "http://localhost:4566",
+            "kinesis": "http://localhost:4566",
+            "lambda": "http://localhost:4566",
+            "rds": "http://localhost:4566",
+            "redshift": "http://localhost:4566",
+            "route53": "http://localhost:4566",
+            "s3": "http://s3.localhost.localstack.cloud:4566",
+            "secretsmanager": "http://localhost:4566",
+            "ses": "http://localhost:4566",
+            "sns": "http://localhost:4566",
+            "sqs": "http://localhost:4566",
+            "ssm": "http://localhost:4566",
+            "stepfunctions": "http://localhost:4566",
+            "sts": "http://localhost:4566"
+          }
+        ],
+        "region": "us-east-1",
+        "secret_key": "fakeSecretForLocalTesting",
+        "skip_credentials_validation": true,
+        "skip_metadata_api_check": "true",
+        "skip_requesting_account_id": true
+      }
+    ]
+  },
+  "resource": {
+    "aws_api_gateway_deployment": {
+      "cdk_deployment": {
+        "//": {
+          "metadata": {
+            "path": "cdktf-stack/cdk_deployment",
+            "uniqueId": "cdk_deployment"
+          }
+        },
+        "depends_on": [
+          "aws_api_gateway_integration.cdk_integration2"
+        ],
+        "description": "Deployed on Fri May 26 2023 02:26:28 GMT-0500 (Central Daylight Time)",
+        "rest_api_id": "${aws_api_gateway_rest_api.cdk_api.id}",
+        "stage_name": "local"
+      }
+    },
+    "aws_api_gateway_integration": {
+      "cdk_integration2": {
+        "//": {
+          "metadata": {
+            "path": "cdktf-stack/cdk_integration2",
+            "uniqueId": "cdk_integration2"
+          }
+        },
+        "http_method": "${aws_api_gateway_method.cdk_method.http_method}",
+        "integration_http_method": "POST",
+        "resource_id": "${aws_api_gateway_resource.cdk_resource.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.cdk_api.id}",
+        "type": "AWS_PROXY",
+        "uri": "${aws_lambda_function.cdk_lambda.invoke_arn}"
+      }
+    },
+    "aws_api_gateway_method": {
+      "cdk_method": {
+        "//": {
+          "metadata": {
+            "path": "cdktf-stack/cdk_method",
+            "uniqueId": "cdk_method"
+          }
+        },
+        "authorization": "NONE",
+        "http_method": "GET",
+        "resource_id": "${aws_api_gateway_resource.cdk_resource.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.cdk_api.id}"
+      }
+    },
+    "aws_api_gateway_resource": {
+      "cdk_resource": {
+        "//": {
+          "metadata": {
+            "path": "cdktf-stack/cdk_resource",
+            "uniqueId": "cdk_resource"
+          }
+        },
+        "parent_id": "${aws_api_gateway_rest_api.cdk_api.root_resource_id}",
+        "path_part": "test",
+        "rest_api_id": "${aws_api_gateway_rest_api.cdk_api.id}"
+      }
+    },
+    "aws_api_gateway_rest_api": {
+      "cdk_api": {
+        "//": {
+          "metadata": {
+            "path": "cdktf-stack/cdk_api",
+            "uniqueId": "cdk_api"
+          }
+        },
+        "name": "MyCDKAPI"
+      }
+    },
+    "aws_iam_role": {
+      "cdk_lambda_exec": {
+        "//": {
+          "metadata": {
+            "path": "cdktf-stack/cdk_lambda_exec",
+            "uniqueId": "cdk_lambda_exec"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\",\"Sid\":\"\"}]}",
+        "name": "cdk_lambda_exec_role"
+      }
+    },
+    "aws_lambda_function": {
+      "cdk_lambda": {
+        "//": {
+          "metadata": {
+            "path": "cdktf-stack/cdk_lambda",
+            "uniqueId": "cdk_lambda"
+          }
+        },
+        "filename": "${data.archive_file.cdk_lambda_zip.output_path}",
+        "function_name": "cdkTestLambda",
+        "handler": "index.handler",
+        "role": "${aws_iam_role.cdk_lambda_exec.arn}",
+        "runtime": "nodejs18.x",
+        "source_code_hash": "${data.archive_file.cdk_lambda_zip.output_base64sha256}"
+      }
+    },
+    "aws_lambda_permission": {
+      "cdk_apigw": {
+        "//": {
+          "metadata": {
+            "path": "cdktf-stack/cdk_apigw",
+            "uniqueId": "cdk_apigw"
+          }
+        },
+        "action": "lambda:InvokeFunction",
+        "function_name": "${aws_lambda_function.cdk_lambda.function_name}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "${aws_api_gateway_rest_api.cdk_api.execution_arn}/*/GET/test",
+        "statement_id": "AllowAPIGatewayInvoke"
+      }
+    }
+  },
+  "terraform": {
+    "backend": {
+      "local": {
+        "path": "D:\\localstackTest\\cdktf\\terraform.cdktf-stack.tfstate"
+      }
+    },
+    "required_providers": {
+      "archive": {
+        "source": "hashicorp/archive",
+        "version": "2.3.0"
+      },
+      "aws": {
+        "source": "aws",
+        "version": "4.66.1"
+      }
+    }
+  }
+}

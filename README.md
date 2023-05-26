@@ -1,41 +1,25 @@
-# LocalStack & Terraform REST API Test
+# LocalStack & Terraform/Pulumi REST API
 
-This is a simple guide on how to: set up LocalStack and Terraform. This example will create an AWS Lambda function and connect it to an API Gateway that we can query locally.
+Develop rapidly for the cloud without the associated costs, slow feedback, and risk of actual deployments using LocalStack!
 
-# Steps
-1. Install Docker 
-   - Localstack runs as a Docker container, so we need to install Docker first. Here's a handy GUI client: [(Docker Desktop)](https://www.docker.com/products/docker-desktop).
-2. Install Python and pip
-   - Localstack is installed using PIP, so we need to install Python and PIP first. You can download Python from [here](https://www.python.org/downloads/). PIP is included in Python 3.4 and above. But just in case here is PIP (https://pypi.org/project/pip/) 
-3. Install Terraform
-   - Install the CLI here: [Terraform CLI](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
-4. Install Localstack and the Terraform provider with pip
+This is a guide on how to set up [Terraform](https://developer.hashicorp.com/terraform) and [LocalStack](https://localstack.cloud/) for local, hot-reloading Typescript AWS Lambda and API Gateway development. You'll be able to query your REST API entirely locally. The features used in this guide require you to have [LocalStack Pro](https://localstack.cloud/pricing/). There is a trial membership available.
 
-   ```shell
-   python -m pip install localstack
-   pip install terraform-local
-   ```
-5. Initialize Localstack Terraform provider and apply resources
-   - Make note of the API Gateway ID that is output in your terminal after running `tflocal apply`, you'll need it to query your API Gateway endpoint
-   Example: 
-   ```
-      aws_api_gateway_rest_api.api: Creation complete after 1s [id=1ltvwqpuju]
-   ````
-   - This will initialize the Terraform provider, build and package your lambda, and apply the resources defined in the `main.tf` file
-   - NOTE: The tflocal commands are functionally identical to the terraform commands, but they will automatically configure the AWS provider to use localstack
-   ```shell
-   tflocal init
-   tflocal apply
-   ```
-6. Query your API Gateway endpoint!
-   - Assemble an HTTP request using the API Gateway ID you noted earlier
-   - Syntax: `http://<API Gateway ID>.execute-api.localhost.localstack.cloud:4566/<stageId>/<path>`
-   - Example Endpoint: `http://1ltvwqpuju.execute-api.localhost.localstack.cloud:4566/local/test`
-   - Example cURL:
-   ```shell
-   curl --location 'http://1ltvwqpuju.execute-api.localhost.localstack.cloud:4566/local/test'
-   ```
-   - Example Response: `{"message":"Hello World!"}`
+**In this guide we will:**
+
+1. [Set up LocalStack Pro](./docs/initial-setup.md)
+
+2. Deploy resources to LocalStack using one of the following IaC providers:
+   1. [Terraform HCL](./docs/iac/terraform-hcl.md) `.tf`
+   2. [Terraform CDK (CDKTF)](./docs/iac/terraform-cdk.md) `.ts`
+   3. Pulumi `.ts`
+
+3. [Query your local REST API](./docs/query-your-api.md)
+
+## Why do I need to have LocalStack Pro?
+
+Some functionality like UpdateIntegration for API Gateway is not currently available for the community edition of LocalStack. It's possible to force the recreation of the API Gateway integration and get around this, but Pro includes a lot of other handy features, such as the [Resource Browser](https://docs.localstack.cloud/user-guide/web-application/resource-browser/) which is a web interface for browsing your LocalStack AWS resources.
+
+
 
 # Final Questions
 1. Is it possible to hot-reload these lambdas for a faster feedback cycle?

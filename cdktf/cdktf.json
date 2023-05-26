@@ -1,0 +1,15 @@
+{
+  "language": "typescript",
+  "app": "node dist/main.js",
+  "projectId": "0b9db99f-afec-4ad7-830c-adc17312ba26",
+  "sendCrashReports": "true",
+  "terraformProviders": [
+    "aws@~> 4.16",
+    "archive@~> 2.3.0"
+  ],
+  "terraformModules": [],
+  "context": {
+    "excludeStackIdFromLogicalIds": "true",
+    "allowSepCharsInLogicalIds": "true"
+  }
+}
