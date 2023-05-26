@@ -2,7 +2,7 @@
 
 Develop rapidly for the cloud without the associated costs, slow feedback, and risk of actual deployments using LocalStack!
 
-This is a guide on how to set up [Terraform](https://developer.hashicorp.com/terraform) and [LocalStack](https://localstack.cloud/) for local, [hot-reloading](https://docs.localstack.cloud/user-guide/tools/lambda-tools/hot-reloading/) Typescript AWS Lambda and API Gateway development. You'll be able to query your REST API entirely locally. The features used in this guide require you to have [LocalStack Pro](https://localstack.cloud/pricing/). There is a trial membership available.
+This is a guide on how to set up [Terraform](https://developer.hashicorp.com/terraform) and [LocalStack](https://localstack.cloud/) for local, [hot-reloading](https://docs.localstack.cloud/user-guide/tools/lambda-tools/hot-reloading/) Node.js AWS Lambda and API Gateway development. You'll be able to query your REST API entirely locally. The features used in this guide require you to have [LocalStack Pro](https://localstack.cloud/pricing/). There is a trial membership available.
 
 **In this guide we will:**
 
