@@ -39,7 +39,7 @@ class LambdaAPIStack extends TerraformStack {
 
 		new ArchiveProvider(this, 'archive', {});
 
-		new AwsProvider(this, 'aws', AWS_CONFIG);
+		new AwsProvider(this, 'aws', STAGE === "local" ? AWS_CONFIG.local : AWS_CONFIG.prod);
 
 		const archiveFile = new DataArchiveFile(this, 'cdk_lambda_zip', {
 			type: 'zip',
@@ -66,9 +66,9 @@ class LambdaAPIStack extends TerraformStack {
 
 		const fun = new LambdaFunction(this, 'cdk_lambda', {
 			functionName: configValues.lambda.name,
-			s3Bucket: STAGE == "local" ? "hot-reload" : null,
-			s3Key: STAGE == "local" ? lambdaDirectory : null,
-			filename: STAGE == "local" ? null : archiveFile.outputPath,
+			s3Bucket: STAGE === "local" ? "hot-reload" : null,
+			s3Key: STAGE === "local" ? lambdaDirectory : null,
+			filename: STAGE === "local" ? null : archiveFile.outputPath,
 			sourceCodeHash: archiveFile.outputBase64Sha256,
 			handler: 'index.handler',
 			runtime: 'nodejs18.x',

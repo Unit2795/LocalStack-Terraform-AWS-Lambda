@@ -1,16 +1,23 @@
+// One option for differentiating environments is to use a variable
 variable "STAGE" {
   type    = string
   default = "local"
 }
 
-// Set our AWS region
 provider "aws" {
+  // Set our AWS region
   region = "us-east-1"
-  skip_credentials_validation = true
-  skip_metadata_api_check     = true
-  skip_requesting_account_id  = true
-  access_key = "fakeKeyForLocalTesting"
-  secretKey = "fakeSecretForLocalTesting"
+
+  // Skip AWS credentials validation if we're running locally
+  skip_credentials_validation = var.STAGE == "local"
+  skip_metadata_api_check     = var.STAGE == "local"
+  skip_requesting_account_id  = var.STAGE == "local"
+
+  // You can use these fake keys for local AWS testing
+  access_key = var.STAGE == "local" ? "fakeKeyForLocalTesting" : "realKeyForProduction"
+  secretKey = var.STAGE == "local" ? "fakeSecretForLocalTesting" : "realSecretForProduction"
+
+  // Configure LocalStack as our AWS endpoints if we're running locally
   endpoints {
     apigateway       = var.STAGE == "local" ? "http://localhost:4566" : null
     cloudformation   = var.STAGE == "local" ? "http://localhost:4566" : null
@@ -32,9 +39,13 @@ data "archive_file" "lambda_zip" {
 // Create the lambda function resource with our build ZIP file
 resource "aws_lambda_function" "lambda" {
   function_name = "myTestLambda"
+  // This 'hot-reload' bucket name is used by LocalStack to mount our lambda code
   s3_bucket     = var.STAGE == "local" ? "hot-reload" : null
+  // This directory needs to be the location of the lambda code on your local machine
   s3_key        = var.STAGE == "local" ? "${path.cwd}/lambda" : null
+  // This is the name of the zip file we created above, this is only used in production
   filename      = var.STAGE == "local" ? null : data.archive_file.lambda_zip.output_path
+  // Used to determine if code has changed and the lambda needs to be redeployed
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   handler       = "index.handler"
   runtime       = "nodejs18.x"

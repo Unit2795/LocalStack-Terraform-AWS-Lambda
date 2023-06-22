@@ -1,8 +1,6 @@
 # LocalStack & Terraform REST API
 
-Develop rapidly for the cloud without the associated costs, slow feedback, and risk of actual deployments using LocalStack!
-
-This is a guide on how to set up [Terraform](https://developer.hashicorp.com/terraform) and [LocalStack](https://localstack.cloud/) for local, [hot-reloading](https://docs.localstack.cloud/user-guide/tools/lambda-tools/hot-reloading/) Node.js AWS Lambda and API Gateway development. You'll be able to query your REST API entirely locally. The features used in this guide require you to have [LocalStack Pro](https://localstack.cloud/pricing/). There is a trial membership available.
+This is an example that uses [Terraform](https://developer.hashicorp.com/terraform) and [LocalStack](https://localstack.cloud/) to spin up a local [hot-reloading](https://docs.localstack.cloud/user-guide/tools/lambda-tools/hot-reloading/) Node.js [AWS Lambda](https://aws.amazon.com/lambda/) and [API Gateway](https://aws.amazon.com/api-gateway/) development environment. The features used in this guide require you to have [LocalStack Pro](https://localstack.cloud/pricing/). There is a trial membership available. Develop rapidly for the cloud without the associated costs, slow feedback, and risk of actual deployments. LocalStack also works with Pulumi, AWS CloudFormation/CDK, SAM, and more.
 
 **In this guide we will:**
 
@@ -14,11 +12,25 @@ This is a guide on how to set up [Terraform](https://developer.hashicorp.com/ter
 
 3. [Query your local REST API](./docs/query-your-api.md)
 
+
+
+## Key Files/Directories
+
+- 📁 /cdktf
+  - Terraform CDK code used to create and manage AWS resources
+- 📁 /docs
+  - Markdown documentation about the project
+- 📁 /lambda
+  - Very simple lambda function that returns a JSON object `{ message: 'Hello World' }` and `200` http status code
+- 📄.env.example
+  - File that contains LocalStack Pro key, copy this to a `.env` file
+- 📄main.tf
+  - Primary Terraform HCL file used to create and manage AWS resources
+
+
+
+
+
 ## Why do I need to have LocalStack Pro?
 
-Some functionality like UpdateIntegration for API Gateway is not currently available for the community edition of LocalStack. It's possible to force the recreation of the API Gateway integration and get around this, but Pro includes a lot of other handy features, such as the [Resource Browser](https://docs.localstack.cloud/user-guide/web-application/resource-browser/) which is a web interface for browsing your LocalStack AWS resources.
-
-# Final Questions
-1. What sort of workflows is this setup good for?
-2. What are some of the limitations of this setup?
-3. Is it better to run the lambda manually or through LocalStack?
+Some functionality like [UpdateIntegration](https://docs.localstack.cloud/references/coverage/coverage_apigatewayv2/#updateintegration) for API Gateway is not currently available for the community edition of LocalStack. It's possible to force the recreation of the API Gateway integration and get around this, but Pro includes a lot of other handy features, such as the [Resource Browser](https://docs.localstack.cloud/user-guide/web-application/resource-browser/) which is a web interface for browsing your LocalStack AWS resources.

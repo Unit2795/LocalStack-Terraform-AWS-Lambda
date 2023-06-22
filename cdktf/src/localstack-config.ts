@@ -29,11 +29,18 @@ const endpoints =  [
 ];
 
 export const AWS_CONFIG = {
-	skipCredentialsValidation: true,
-	skipMetadataApiCheck: "true",
-	skipRequestingAccountId: true,
-	accessKey: "fakeKeyForLocalTesting",
-	secretKey: "fakeSecretForLocalTesting",
-	region: "us-east-1",
-	endpoints
+	local: {
+		skipCredentialsValidation: true,
+		skipMetadataApiCheck: "true",
+		skipRequestingAccountId: true,
+		accessKey: "fakeKeyForLocalTesting",
+		secretKey: "fakeSecretForLocalTesting",
+		region: "us-east-1",
+		endpoints
+	},
+	prod: {
+		accessKey: "realKeyForProduction",
+		secretKey: "realSecretForProduction",
+		region: "us-east-1"
+	}
 };
