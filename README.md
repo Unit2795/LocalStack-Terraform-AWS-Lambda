@@ -13,7 +13,6 @@ This is an example that uses [Terraform](https://developer.hashicorp.com/terrafo
 3. [Query your local REST API](./docs/query-your-api.md)
 
 
-
 ## Key Files/Directories
 
 - 📁 /cdktf
@@ -28,9 +27,10 @@ This is an example that uses [Terraform](https://developer.hashicorp.com/terrafo
   - Primary Terraform HCL file used to create and manage AWS resources
 
 
-
-
-
 ## Why do I need to have LocalStack Pro?
 
 Some functionality like [UpdateIntegration](https://docs.localstack.cloud/references/coverage/coverage_apigatewayv2/#updateintegration) for API Gateway is not currently available for the community edition of LocalStack. It's possible to force the recreation of the API Gateway integration and get around this, but Pro includes a lot of other handy features, such as the [Resource Browser](https://docs.localstack.cloud/user-guide/web-application/resource-browser/) which is a web interface for browsing your LocalStack AWS resources.
+
+----
+
+If this example was helpful to you or you have questions, drop me a line at [d@djoz.us](mailto:d@djoz.us). Contributions are welcome!
